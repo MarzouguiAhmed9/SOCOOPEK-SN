@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgrescontainer
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+      POSTGRES_DB: SOOCEPEC_SOCIAL_NETWORK
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - 5432:5432
+    networks:
+      - springangularproject
+    restart: unless-stopped
+
+
+  mail-dev:
+    container_name: mail-dev-bsn
+    image: maildev/maildev
+    ports:
+      - 1080:1080
+      - 1025:1025
+
+
+
+
+networks:
+  springangularproject:
+    driver: bridge
+
+volumes:
+  postgres:
+    driver: local
