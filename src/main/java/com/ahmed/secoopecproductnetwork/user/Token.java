@@ -1,12 +1,16 @@
 package com.ahmed.secoopecproductnetwork.user;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
-@Entity
+
+@Getter
+@Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
 public class Token {
     @Id
     @GeneratedValue

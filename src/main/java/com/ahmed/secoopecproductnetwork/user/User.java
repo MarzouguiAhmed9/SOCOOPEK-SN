@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="User")
+@Table(name="utilisateur")
 @EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails, Principal{
     @Override
@@ -34,7 +34,7 @@ public class User implements UserDetails, Principal{
 
     @Id
     @GeneratedValue
-private Integer id;
+    private Integer id;
     private String firstname;
     private String lastname;
     private LocalTime dateOfBirth;

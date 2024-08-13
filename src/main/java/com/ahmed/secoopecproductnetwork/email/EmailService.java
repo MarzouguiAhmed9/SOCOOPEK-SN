@@ -3,6 +3,7 @@ package com.ahmed.secoopecproductnetwork.email;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -13,14 +14,15 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-@Async
-@Service
 @RequiredArgsConstructor
+@Service
+
 public class EmailService {
     private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;
 
 
+    @Async
     public void sendemail(String to,String username,EmailTemplateName emailTemplateName,String confimationurl,String activationcode,String subject) throws MessagingException {
         String templatename;
         if(emailTemplateName==null) {

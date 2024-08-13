@@ -20,11 +20,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class Authenticationservice {
-    private RoleRepository roleRepository;
-    UserRepository userRepository;
-    @Value("${application.mailing.frontend.activation-url}")
-    private String activationUrl; // Correct placement of @Value
-    TokenRepository tokenRepository;
+    private final RoleRepository roleRepository;
+   private final UserRepository userRepository;
+    @Value("${spring.application.mailing.frontend.activation-url}")
+    private  String activationUrl; // Correct placement of @Value
+    private final TokenRepository tokenRepository;
 
     private final EmailService emailService;
 

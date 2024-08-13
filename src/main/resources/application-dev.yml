@@ -10,34 +10,35 @@ spring:
     database: postgresql
     show-sql: true
 
-
+#//1025 :This is the port where MailDev listens for incoming SMTP connections. Your application sends emails to this port
   mail:
     host: localhost
     port: 1025
-    username: ahmed
-    password: ahmed
+    username: ali
+    password: ali
     properties:
       mail:
         smtp:
           trust: "*"
         auth: true
         starttls:
-          enable:true
+          enabled: true
         connectiontimeout: 5000
-        timeout : 3000
+        timeout: 3000
         writetimeout: 5000
-
   application:
     security:
       jwt:
-        secret-key: asdasd
-        expiration: 800000
-
-
+        secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+        expiration: 86400000 # a day
+        refresh-token:
+          expiration: 604800000 # 7 days
     mailing:
       frontend:
         activation-url: http://localhost:4200/activate-account
-
-
-server:
-  port: 8088
+    file:
+      uploads:
+        photos-output-path: ./uploads
+  rsocket:
+    server:
+      port: 8088
