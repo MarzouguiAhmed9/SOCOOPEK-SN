@@ -65,12 +65,13 @@ public class Authenticationservice {
     }
 
     private String generateActivationtoken(int length) {
-        String chracters="0123456789";
-        StringBuilder codebuilder=new StringBuilder();
-        SecureRandom secureRandom=new SecureRandom();
-        for(int i=0;i<length;i++){int randomindex=secureRandom.nextInt(chracters.length());
-            codebuilder.append(chracters.charAt(randomindex));
-    }
-    return codebuilder.toString();
+     String charat="123456789";
+     StringBuilder token=new StringBuilder();
+     SecureRandom randomin=new SecureRandom();
+     for (int i=0;i<length;i++){
+        int k=randomin.nextInt(charat.length());
+        token.append(charat.charAt(k));
+     }
+     return token.toString();
 
 }}
