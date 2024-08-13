@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 @Entity
 @Builder
-@RequiredArgsConstructor
 public class Token {
     @Id
     @GeneratedValue

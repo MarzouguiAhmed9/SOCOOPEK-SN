@@ -1,4 +1,4 @@
-package security;
+package com.ahmed.secoopecproductnetwork.security;
 
 import com.ahmed.secoopecproductnetwork.user.UserRepository;
 import jakarta.transaction.Transactional;

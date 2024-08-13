@@ -1,4 +1,4 @@
-package security;
+package com.ahmed.secoopecproductnetwork.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

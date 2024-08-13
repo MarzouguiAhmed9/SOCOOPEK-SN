@@ -1,6 +1,7 @@
 package com.ahmed.secoopecproductnetwork.auth;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
@@ -17,7 +18,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<?>register(@RequestBody @Valid RegistrationRequest request){
+    public ResponseEntity<?>register(@RequestBody @Valid RegistrationRequest request) throws MessagingException {
         authenticationservice.register(request);
         return ResponseEntity.accepted().build();
     }

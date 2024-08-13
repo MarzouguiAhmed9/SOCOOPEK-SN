@@ -1,12 +1,15 @@
 package com.ahmed.secoopecproductnetwork.auth;
 
 import com.ahmed.secoopecproductnetwork.email.EmailService;
+import com.ahmed.secoopecproductnetwork.email.EmailTemplateName;
 import com.ahmed.secoopecproductnetwork.role.RoleRepository;
 import com.ahmed.secoopecproductnetwork.user.Token;
 import com.ahmed.secoopecproductnetwork.user.TokenRepository;
 import com.ahmed.secoopecproductnetwork.user.User;
 import com.ahmed.secoopecproductnetwork.user.UserRepository;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +22,15 @@ import java.util.List;
 public class Authenticationservice {
     private RoleRepository roleRepository;
     UserRepository userRepository;
+    @Value("${application.mailing.frontend.activation-url}")
+    private String activationUrl; // Correct placement of @Value
     TokenRepository tokenRepository;
 
     private final EmailService emailService;
 
     private final PasswordEncoder passwordEncoder;
-    public void register(RegistrationRequest request) {
+    public void register(RegistrationRequest request) throws MessagingException {
+        //role is an independant entity
         var userrole=roleRepository.findByName("USER").orElseThrow(()->new IllegalStateException("not found"));
          var user= User.builder().firstname(request.getFirstname())
                  .lastname(request.getLastname())
@@ -36,15 +42,18 @@ public class Authenticationservice {
          userRepository.save(user);
          sendvalidationemail(user);
 
-
+//build a user with the registration request
 
     }
 
-    private void sendvalidationemail(User user) {
-        var newtoken=generateandsaceactivationtoken(user);
+    private void sendvalidationemail(User user) throws MessagingException {
+        var newtoken=generateandsaveactivationtoken(user);
+
+        String activationurl;
+        emailService.sendemail(user.getEmail(), user.getFirstname(), EmailTemplateName.ACTIVATE_ACCOUNT,activationUrl,newtoken,"account activation");
     }
 
-    private String generateandsaceactivationtoken(User user) {
+    private String generateandsaveactivationtoken(User user) {
         //generate token
         String generatedToken=generateActivationtoken(6);
         var token= Token.builder().token(generatedToken)

@@ -1,19 +1,14 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:/SOOCEPEC_SOCIAL_NETWORK
+    url: jdbc:postgresql://localhost:5432/postgres
     username: username
     password: password
     driver-class-name: org.postgresql.Driver
-
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+      ddl-auto: create
     database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSLDialect
+    show-sql: true
 
 
   mail:
@@ -37,3 +32,12 @@ spring:
       jwt:
         secret-key: asdasd
         expiration: 800000
+
+
+    mailing:
+      frontend:
+        activation-url: http://localhost:4200/activate-account
+
+
+server:
+  port: 8088

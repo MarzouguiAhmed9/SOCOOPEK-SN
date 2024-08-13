@@ -1,4 +1,4 @@
-package security;
+package com.ahmed.secoopecproductnetwork.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,12 +18,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @EnableMethodSecurity (securedEnabled = true)
 public class SecurutyConfig {
-    //specifies how requests should be authorized,
-    // how sessions should be managed,
-    // and how authentication should be handled.
+
     private final JwtFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
+
+
+    //specifies how requests should be authorized,
+    // how sessions should be managed,
+    // and how authentication should be handled.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -48,8 +51,8 @@ public class SecurutyConfig {
                                 .authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .authenticationProvider(authenticationProvider) //check username and password
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);//check token
 
         return http.build();
     }
