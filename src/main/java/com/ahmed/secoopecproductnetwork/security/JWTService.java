@@ -46,6 +46,7 @@ public class JWTService {
         return extractclaims(token,Claims::getExpiration);
     }
     private Claims getallclaims(String token){
+        //pars
         return Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token).getBody();
     }
     public String generatetoken(UserDetails userDetails, Map<String, Object> claims){
@@ -56,7 +57,11 @@ public class JWTService {
             , UserDetails userDetails,
                               long jwtRxpiration) {
         var authereties=userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
-         return  Jwts.builder().setClaims(claims).setSubject(userDetails.getUsername()).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis()+jwtRxpiration)).claim("authoroties",authereties)
+         return  Jwts.builder().setClaims(claims).
+                 setSubject(userDetails.getUsername()).
+                 setIssuedAt(new Date(System.currentTimeMillis()))
+                 .setExpiration(new Date(System.currentTimeMillis()+jwtRxpiration))
+                 .claim("authoroties",authereties)
                 .signWith(getSignInKey()).compact();
     }
 }

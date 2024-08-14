@@ -16,19 +16,23 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     private final Authenticationservice authenticationservice;
 
-    @PostMapping("/register")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<?>register(@RequestBody @Valid RegistrationRequest request) throws MessagingException {
-        authenticationservice.register(request);
-        return ResponseEntity.accepted().build();
+ @PostMapping("/register")
+ @ResponseStatus(HttpStatus.ACCEPTED)//202
+ public ResponseEntity<?> register(@RequestBody @Valid RegistrationRequest registrationRequest) throws MessagingException {
+     authenticationservice.register(registrationRequest);
+     return ResponseEntity.accepted().build();
+ }
+
+
+    @PostMapping("/authenticate") //200
+    public ResponseEntity<AuthenticateResponse> authenticate(@RequestBody @Valid AuthenticateRequest authenticateRequest) {
+        return ResponseEntity.ok(authenticationservice.authenticate(authenticateRequest));
     }
 
 
-    @PostMapping("/authenticate")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<?> authenticate(@RequestBody @Valid AuthenticateRequest authenticateRequest){
-        authenticateRequest.authenticate(authenticateRequest);
-        return ResponseEntity.accepted().build();
+   @GetMapping("/activate-account")
+    void confirm(@RequestParam String token) throws MessagingException {
+        authenticationservice.activateaccount(token);
     }
 
 
