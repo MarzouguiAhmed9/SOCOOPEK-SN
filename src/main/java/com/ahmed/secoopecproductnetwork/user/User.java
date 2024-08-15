@@ -1,7 +1,9 @@
 package com.ahmed.secoopecproductnetwork.user;
 
 
+import com.ahmed.secoopecproductnetwork.history.ProductHistory;
 import com.ahmed.secoopecproductnetwork.role.Role;
+import com.ahmed.secoopecproductnetwork.secoopecproduct.SecoopecProduct;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -43,6 +45,9 @@ public class User implements UserDetails, Principal{
     private String password;
     private boolean accountLocked;
     private boolean enabled;
+
+    @OneToMany(mappedBy = "owner")
+    List<SecoopecProduct> products;
 
     //liste of roles
 
@@ -95,6 +100,9 @@ public class User implements UserDetails, Principal{
 
    @OneToMany (mappedBy = "user")
    List <Token> tokens;
+
+    @OneToMany (mappedBy = "user")
+    List<ProductHistory>productHistories;
     private String getfullname(){
         return firstname + " " +lastname;
     }
