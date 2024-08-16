@@ -3,7 +3,6 @@ package com.ahmed.secoopecproductnetwork.secoopecproduct;
 import com.ahmed.secoopecproductnetwork.common.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import javafx.concurrent.Service;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +25,7 @@ public class ProductController {
         return ResponseEntity.ok(service.save(productrequest,connecteduser));
     }
 
+
     @GetMapping("{book-id}")
     public ResponseEntity<ProdcutResponse>findbookbyid
             (
@@ -34,7 +34,8 @@ public class ProductController {
         return ResponseEntity.ok(service.findById(productid));
     }
 
-    @GetMapping   public ResponseEntity<PageResponse<ProdcutResponse>> finadallproduct (
+    @GetMapping
+    public ResponseEntity<PageResponse<ProdcutResponse>> finadallproduct (
             @RequestParam(name="page",defaultValue = "0",required = false)int page,
             @RequestParam(name="size",defaultValue = "10",required = false)int size ,
             Authentication connecteduser){
@@ -42,4 +43,53 @@ public class ProductController {
 
     }
 
+    @GetMapping("/owner")
+        public ResponseEntity<PageResponse<ProdcutResponse>>findallproductbyowner(
+                @RequestParam(name="page",defaultValue = "0",required = false) int page,
+                @RequestParam(name="page",defaultValue = "0",required = false) int size,
+                Authentication authentication){
+
+               return ResponseEntity.ok(service.findallbookbyowner(page,size,authentication));
+        }
+    @GetMapping("/borrowed")
+    public ResponseEntity<PageResponse<BorrowedResponse>>Findallborrwedproduct(
+            @RequestParam(name="page",defaultValue = "0",required = false) int page,
+            @RequestParam(name="page",defaultValue = "0",required = false) int size,
+            Authentication authentication){
+
+        return ResponseEntity.ok(service.findallborrwedproduct(page,size,authentication));
+    }
+
+    @GetMapping("/returned")
+    public ResponseEntity<PageResponse<BorrowedResponse>>Findallreterneddproduct(
+            @RequestParam(name="page",defaultValue = "0",required = false) int page,
+            @RequestParam(name="page",defaultValue = "0",required = false) int size,
+            Authentication authentication){
+
+        return ResponseEntity.ok(service.findallreturnedproduct(page,size,authentication));
+    }
+
+    @PatchMapping("/shareable/{product-id}")
+    public ResponseEntity<Integer >updateshareavlestatus(@PathVariable("product-id")Integer id,Authentication connecteduser)
+    {
+        return  ResponseEntity.ok(service.updateShareableStatus(id,connecteduser));
+    }
+
+    @PatchMapping("/archived/{product-id}")
+    public ResponseEntity<Integer >updatearchivedstatus(@PathVariable("product-id")Integer id,Authentication connecteduser)
+    {
+        return  ResponseEntity.ok(service.updateArchivedStatus(id,connecteduser));
+    }
+
+    @PostMapping("/borrowproduct/{product-id}")
+    public ResponseEntity<Integer >borrowproduct(@PathVariable("product-id")Integer id,Authentication connecteduser)
+    {
+        return  ResponseEntity.ok(service.borrowproduct(id,connecteduser));
+    }
+
+    @PatchMapping ("/borrow/return/{product-id}")
+    public ResponseEntity<Integer >returnborrowproduct(@PathVariable("product-id")Integer id,Authentication connecteduser)
+    {
+        return  ResponseEntity.ok(service.returnbarrowproduct(id,connecteduser));
+    }
 }

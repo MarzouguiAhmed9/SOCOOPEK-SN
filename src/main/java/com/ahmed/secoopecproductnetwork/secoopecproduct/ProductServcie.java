@@ -1,18 +1,21 @@
 package com.ahmed.secoopecproductnetwork.secoopecproduct;
 
 import com.ahmed.secoopecproductnetwork.common.PageResponse;
+import com.ahmed.secoopecproductnetwork.exception.OperationNotPermit;
+import com.ahmed.secoopecproductnetwork.history.ProductHistory;
+import com.ahmed.secoopecproductnetwork.history.ProductTransactionHistory;
 import com.ahmed.secoopecproductnetwork.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Book;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +23,7 @@ import java.util.stream.Collectors;
 public class ProductServcie {
     private final SecoopecProductRepository secoopecProductRepository;
     private final ProductMapper productMapper;
+    private  final ProductTransactionHistory productTransactionHistory;
     public Integer save(Productrequest prodcutrequest, Authentication connecteduser){
        User user= (User)connecteduser.getPrincipal();
        SecoopecProduct secoopecProduct=productMapper.toproduct(prodcutrequest);
@@ -42,5 +46,107 @@ public class ProductServcie {
         Page<SecoopecProduct> products=secoopecProductRepository.findalldisplayproducts(pageable,user.getId());
         List<ProdcutResponse> productsresponse=products.stream().map(productMapper::toproductresponse).toList();
         return  new PageResponse<>(productsresponse,products.getNumber(),products.getSize(),products.getTotalElements(),products.getTotalPages(),products.isFirst(),products.isLast());
+    }
+
+    public PageResponse<ProdcutResponse> findallbookbyowner(int page, int size, Authentication authentication) {
+        User user=(User)authentication.getPrincipal();
+        Pageable pageable=PageRequest.of(page,size);
+        Page <SecoopecProduct> products=secoopecProductRepository.findalldisplayproductsbyowner(pageable,user.getId());
+        List <ProdcutResponse> prodcutsresponses=products.stream().map(productMapper::toproductresponse).toList();
+        return  new PageResponse<>(prodcutsresponses,products.getNumber(),products.getSize(),products.getTotalElements(),products.getTotalPages(),products.isFirst(),products.isLast());
+    }
+
+   public PageResponse<BorrowedResponse> findallborrwedproduct(int page, int size, Authentication authentication) {
+       User user=(User)authentication.getPrincipal();
+       Pageable pageable=PageRequest.of(page,size);
+       Page <ProductHistory> products=productTransactionHistory.findAllproducts(pageable,user.getId());
+       List <BorrowedResponse> prodcutResponses=products.stream().map( productMapper::toBorrowedResponse).toList();
+
+       return  new PageResponse<>(prodcutResponses,products.getNumber(),products.getSize(),products.getTotalElements(),products.getTotalPages(),products.isFirst(),products.isLast());
+   }
+
+    public PageResponse<BorrowedResponse> findallreturnedproduct(int page, int size, Authentication authentication) {
+        User user=(User)authentication.getPrincipal();
+        Pageable pageable=PageRequest.of(page,size);
+        Page <ProductHistory> products=productTransactionHistory.findAllreturnedproducts(pageable,user.getId());
+        List <BorrowedResponse> prodcutResponses=products.stream().map( productMapper::toBorrowedResponse).toList();
+
+        return  new PageResponse<>(prodcutResponses,products.getNumber(),products.getSize(),products.getTotalElements(),products.getTotalPages(),products.isFirst(),products.isLast());
+    }
+
+    public Integer updateShareableStatus(Integer id, Authentication connectedUser) {
+        // Fetch the SecoopecProduct entity by its ID
+        SecoopecProduct secoopecProduct = secoopecProductRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No product found with this ID"));
+
+        // Get the currently authenticated user
+        User user = (User) connectedUser.getPrincipal();
+
+        // Check if the authenticated user is the owner of the product
+        if (!user.getId().equals(secoopecProduct.getOwner().getId())) {
+            throw new OperationNotPermit("You are not authorized to update this product");
+        }
+        secoopecProduct.setShareable(!secoopecProduct.isShareable());
+        secoopecProductRepository.save(secoopecProduct);
+        return  id;
+
+
+    }
+
+    public Integer updateArchivedStatus(Integer id, Authentication connecteduser) {
+        // Fetch the SecoopecProduct entity by its ID
+        SecoopecProduct secoopecProduct = secoopecProductRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No product found with this ID"));
+
+        // Get the currently authenticated user
+        User user = (User) connecteduser.getPrincipal();
+
+        // Check if the authenticated user is the owner of the product
+        if (!user.getId().equals(secoopecProduct.getOwner().getId())) {
+            throw new OperationNotPermit("You are not authorized to update this product");
+        }
+        secoopecProduct.setArchived(!secoopecProduct.isArchived());
+        secoopecProductRepository.save(secoopecProduct);
+        return  id;
+    }
+
+    public Integer borrowproduct(Integer id, Authentication connecteduser) {
+        SecoopecProduct secoopecProduct=secoopecProductRepository.findById(id)
+                .orElseThrow(()->new EntityNotFoundException("no book found"));
+        if(secoopecProduct.isArchived() || !secoopecProduct.isShareable()){
+            throw  new OperationNotPermit("the request cannot be borrowed");
+
+        }
+        User user = (User) connecteduser.getPrincipal();
+
+        if(Objects.equals(secoopecProduct.getOwner().getId(),user.getId())){
+            throw new OperationNotPermit("you cannot barrow your product");
+        }
+        final boolean isalreadyborrowed=productTransactionHistory.isalreadyborrowedbyuser(id,user.getId());
+        if(isalreadyborrowed){
+            throw new OperationNotPermit("already borrowed");
+        }
+        ProductHistory productHistory=ProductHistory.builder().user(user).product(secoopecProduct).returned(false).returnapprouved(false).build();
+        return  productTransactionHistory.save(productHistory).getId();
+    }
+
+    public Integer returnbarrowproduct(Integer id, Authentication connecteduser) {
+        SecoopecProduct secoopecProduct=secoopecProductRepository.findById(id)
+                .orElseThrow(()->new EntityNotFoundException("no book found"));
+        if(secoopecProduct.isArchived() || !secoopecProduct.isShareable()){
+            throw  new OperationNotPermit("the request cannot be borrowed");
+
+        }
+        User user = (User) connecteduser.getPrincipal();
+
+        if(Objects.equals(secoopecProduct.getOwner().getId(),user.getId())){
+            throw new OperationNotPermit("you cannot barrow or return your product");
+        }
+        ProductHistory productHistory=productTransactionHistory.findByproductidanduserid(id,user.getId())
+                .orElseThrow(()->new OperationNotPermit("you did not borrow this product"));
+
+     productHistory.setReturned(true);
+        return  productTransactionHistory.save(productHistory).getId();
+
     }
 }

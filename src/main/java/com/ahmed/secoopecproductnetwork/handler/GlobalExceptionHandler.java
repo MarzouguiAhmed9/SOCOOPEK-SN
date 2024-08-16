@@ -1,6 +1,8 @@
 package com.ahmed.secoopecproductnetwork.handler;
 
+import com.ahmed.secoopecproductnetwork.exception.OperationNotPermit;
 import jakarta.mail.MessagingException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.DisabledException;
@@ -15,6 +17,7 @@ import javax.management.BadBinaryOpValueExpException;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RestControllerAdvice
@@ -31,6 +34,16 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleException(MessagingException exp) {
         return ResponseEntity
                 .status(INTERNAL_SERVER_ERROR)
+                .body(
+                        ExceptionResponse.builder()
+                                .error(exp.getMessage())
+                                .build()
+                );
+    }
+    @ExceptionHandler(OperationNotPermit.class)
+    public ResponseEntity<ExceptionResponse> handleExceptionnotpermit(MessagingException exp) {
+        return ResponseEntity
+                .status(BAD_REQUEST)
                 .body(
                         ExceptionResponse.builder()
                                 .error(exp.getMessage())
@@ -84,7 +97,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ExceptionResponse.builder().businessEroorCode(BusinessErrorCode.ACCOUNT_DISABLED.getCode()).businessExceptionDescription(BusinessErrorCode.ACCOUNT_DISABLED.getDescription()).error(exep.getMessage()).build()); }
 
 
-
+@ExceptionHandler(EntityNotFoundException.class)
+public ResponseEntity<ExceptionResponse>handlenotfoundException(EntityNotFoundException exem){
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ExceptionResponse.builder().businessEroorCode(BusinessErrorCode.NOT_FOUND.getCode()).businessExceptionDescription(BusinessErrorCode.NOT_FOUND.getDescription()).error(exem.getMessage()).build());
+}
 
 
 
