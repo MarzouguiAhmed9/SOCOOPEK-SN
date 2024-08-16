@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -31,7 +32,10 @@ public class BeansConfig {
         return authenticationProvider; //object, which is used to perform the authentication process
     }
 
-
+@Bean
+public AuditorAware <Integer>auditorAware(){
+        return new ApplicationAuditAWARE();
+}
 
     @Bean
     public PasswordEncoder passwordEncoder(){
