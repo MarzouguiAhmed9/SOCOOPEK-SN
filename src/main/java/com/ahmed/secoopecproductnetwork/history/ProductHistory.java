@@ -31,7 +31,7 @@ public class ProductHistory extends BaseEntite {
 
 
 private  boolean returned;
-
+//returned approuved by owner
 private boolean returnapprouved;
 
 

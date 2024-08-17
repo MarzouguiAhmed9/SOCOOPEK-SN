@@ -149,4 +149,24 @@ public class ProductServcie {
         return  productTransactionHistory.save(productHistory).getId();
 
     }
+
+    public Integer approubeproductreturned(Integer id, Authentication connecteduser) {
+        SecoopecProduct secoopecProduct=secoopecProductRepository.findById(id)
+                .orElseThrow(()->new EntityNotFoundException("no book found"));
+        if(secoopecProduct.isArchived() || !secoopecProduct.isShareable()){
+            throw  new OperationNotPermit("the request cannot be borrowed");
+
+        }
+        User user = (User) connecteduser.getPrincipal();
+
+        if(Objects.equals(secoopecProduct.getOwner().getId(),user.getId())){
+            throw new OperationNotPermit("you cannot barrow or return your product");
+        }
+        ProductHistory productHistory=productTransactionHistory.findByproductidandownerid(id,user.getId())
+                .orElseThrow(()->new OperationNotPermit("not returned yet"));
+        productHistory.setReturnapprouved(true);
+        return  productTransactionHistory.save(productHistory).getId();
+
+
+    }
 }

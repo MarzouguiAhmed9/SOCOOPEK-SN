@@ -56,4 +56,14 @@ AND transaction.returnapprouved=false
 
 """)
 Optional<ProductHistory> findByproductidanduserid(Integer pid, Integer userid);
+@Query(
+"""
+SELECT transaction
+FROM ProductHistory transaction
+WHERE transaction.product.owner.id=:userid
+AND transaction.product.id=:pid
+AND transaction.returned=false
+AND transaction.returnapprouved=false
+""")
+    Optional<ProductHistory> findByproductidandownerid(Integer pid, Integer userid);
 }

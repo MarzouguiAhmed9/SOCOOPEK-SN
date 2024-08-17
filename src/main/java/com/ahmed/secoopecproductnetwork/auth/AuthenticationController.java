@@ -17,7 +17,7 @@ public class AuthenticationController {
     private final Authenticationservice authenticationservice;
 
  @PostMapping("/register")
- @ResponseStatus(HttpStatus.ACCEPTED)//202
+ @ResponseStatus(HttpStatus.ACCEPTED)//202  dealing with asynchronous operations
  public ResponseEntity<?> register(@RequestBody @Valid RegistrationRequest registrationRequest) throws MessagingException {
      authenticationservice.register(registrationRequest);
      return ResponseEntity.accepted().build();

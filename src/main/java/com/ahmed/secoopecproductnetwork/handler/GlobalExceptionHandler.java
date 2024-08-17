@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
                 );
     }
     @ExceptionHandler(OperationNotPermit.class)
-    public ResponseEntity<ExceptionResponse> handleExceptionnotpermit(MessagingException exp) {
+    public ResponseEntity<ExceptionResponse> handleExceptionnotpermit(OperationNotPermit exp) {
         return ResponseEntity
                 .status(BAD_REQUEST)
                 .body(
@@ -104,9 +104,13 @@ public ResponseEntity<ExceptionResponse>handlenotfoundException(EntityNotFoundEx
 
 
 
-@ExceptionHandler(LockedException.class)
+@ExceptionHandler(LockedException.class)//401
 //we we catch this execption we return thus response
     public ResponseEntity<ExceptionResponse> handleLocked (LockedException exp){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ExceptionResponse.builder().businessEroorCode(BusinessErrorCode.ACCOUNT_LOCKED.getCode()).businessExceptionDescription(BusinessErrorCode.ACCOUNT_LOCKED.getDescription()).error(exp.getMessage()).build());
     }
+
+
+
+
 }

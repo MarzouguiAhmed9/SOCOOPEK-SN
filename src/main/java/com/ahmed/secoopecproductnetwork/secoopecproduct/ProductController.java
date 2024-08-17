@@ -92,4 +92,9 @@ public class ProductController {
     {
         return  ResponseEntity.ok(service.returnbarrowproduct(id,connecteduser));
     }
+
+    @PatchMapping("/borrow/approve/{product-id}")
+    public ResponseEntity<Integer> approuvereturnedproduct(@PathVariable("product-id")Integer id,Authentication conecteduser){
+        return ResponseEntity.ok(service.approubeproductreturned(id,conecteduser));
+    }
 }

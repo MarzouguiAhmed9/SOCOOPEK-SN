@@ -28,6 +28,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
 
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String jwtoken;
         final String userEmail;
@@ -44,7 +45,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetailname,null,userDetailname.getAuthorities() );
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));//IP address
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            }
+
+             }
 
     //Ensuring Consistency: Even though the user was authenticated initially and their details were set in the SecurityContextHolder,
             // you need to validate the token on every request to ensure the token is still
