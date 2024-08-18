@@ -31,7 +31,7 @@ public class Authenticationservice {
     private final RoleRepository roleRepository;
     private final JWTService jwtService;
    private final UserRepository userRepository;
-    @Value("${spring.application.mailing.frontend.activation-url}")
+    @Value("${application.mailing.frontend.activation-url}")
     private  String activationUrl; // Correct placement of @Value
     private final TokenRepository tokenRepository;
 

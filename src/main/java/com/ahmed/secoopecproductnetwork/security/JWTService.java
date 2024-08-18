@@ -18,10 +18,10 @@ import java.util.function.Function;
 @Service
 public class JWTService {
 
-    @Value("${spring.application.security.jwt.expiration}")
+    @Value("${application.security.jwt.expiration}")
     private long JWTRxpiration;
 
-    @Value("${spring.application.security.jwt.secret-key}")
+    @Value("${application.security.jwt.secret-key}")
     private  String SECRET_KEY ;
     public <T> T extractclaims( String token , Function<Claims,T> claimsresolver){
         Claims claims=getallclaims(token);

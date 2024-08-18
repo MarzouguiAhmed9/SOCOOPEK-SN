@@ -2,14 +2,17 @@ package com.ahmed.secoopecproductnetwork.secoopecproduct;
 
 import com.ahmed.secoopecproductnetwork.common.PageResponse;
 import com.ahmed.secoopecproductnetwork.exception.OperationNotPermit;
+import com.ahmed.secoopecproductnetwork.file.FileStorageSerivce;
 import com.ahmed.secoopecproductnetwork.history.ProductHistory;
 import com.ahmed.secoopecproductnetwork.history.ProductTransactionHistory;
 import com.ahmed.secoopecproductnetwork.user.User;
+import jakarta.mail.Multipart;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.print.Book;
 import java.util.List;
@@ -24,6 +27,7 @@ public class ProductServcie {
     private final SecoopecProductRepository secoopecProductRepository;
     private final ProductMapper productMapper;
     private  final ProductTransactionHistory productTransactionHistory;
+    private  final FileStorageSerivce fileStorageService;
     public Integer save(Productrequest prodcutrequest, Authentication connecteduser){
        User user= (User)connecteduser.getPrincipal();
        SecoopecProduct secoopecProduct=productMapper.toproduct(prodcutrequest);
@@ -166,6 +170,17 @@ public class ProductServcie {
                 .orElseThrow(()->new OperationNotPermit("not returned yet"));
         productHistory.setReturnapprouved(true);
         return  productTransactionHistory.save(productHistory).getId();
+
+
+    }
+
+    public void uploadimageproduct(MultipartFile file, Authentication connecteduser, Integer id) {
+        SecoopecProduct secoopecProduct=secoopecProductRepository.findById(id)
+                .orElseThrow(()->new EntityNotFoundException("no product found"));
+        User user = (User) connecteduser.getPrincipal();
+        var productcover=fileStorageService.saveFile(file,user.getId());
+        secoopecProduct.setProductimage(productcover);
+        secoopecProductRepository.save(secoopecProduct);
 
 
     }

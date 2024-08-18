@@ -1,6 +1,8 @@
 package com.ahmed.secoopecproductnetwork.secoopecproduct;
 
+import com.ahmed.secoopecproductnetwork.file.FileUtils;
 import com.ahmed.secoopecproductnetwork.history.ProductHistory;
+import org.aspectj.util.FileUtil;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,7 +20,7 @@ public class ProductMapper {
     public ProdcutResponse toproductresponse(SecoopecProduct secoopecProduct) {
         return ProdcutResponse.builder().id(secoopecProduct.getId()).producttitle(secoopecProduct.getProducttitle()).
                 price(secoopecProduct.getPrice()).identifiant(secoopecProduct.getIdentifiant()).description(secoopecProduct.getDescription())
-                .archived(secoopecProduct.isArchived()).shareable(secoopecProduct.isShareable()).owner(secoopecProduct.getOwner().getFirstname()).rate(secoopecProduct.getrate()).build();
+                .archived(secoopecProduct.isArchived()).shareable(secoopecProduct.isShareable()).owner(secoopecProduct.getOwner().getFirstname()).rate(secoopecProduct.getrate()).productimage(FileUtils.readFileLocation(secoopecProduct.getProductimage())).build();
     }
 
     public BorrowedResponse toBorrowedResponse(ProductHistory productHistory) {

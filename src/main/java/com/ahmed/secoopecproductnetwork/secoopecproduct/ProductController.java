@@ -1,13 +1,16 @@
 package com.ahmed.secoopecproductnetwork.secoopecproduct;
 
 import com.ahmed.secoopecproductnetwork.common.PageResponse;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.mail.Multipart;
 import jakarta.validation.Valid;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -97,4 +100,19 @@ public class ProductController {
     public ResponseEntity<Integer> approuvereturnedproduct(@PathVariable("product-id")Integer id,Authentication conecteduser){
         return ResponseEntity.ok(service.approubeproductreturned(id,conecteduser));
     }
+
+    @PostMapping(value = "/cover/{product-id}",consumes = "multipart/form-data")
+    public ResponseEntity<?> uploadproductimage(
+            @PathVariable("product-id")Integer id,
+            @Parameter()
+            @RequestPart ("file") MultipartFile file,
+            Authentication connecteduser
+
+            )
+    {
+        service.uploadimageproduct(file,connecteduser,id);
+        return ResponseEntity.accepted().build();
+    }
+
+
 }
