@@ -41,4 +41,4 @@ application:
         photos-output-path: ./uploads
   rsocket:
     server:
-      port: 8088
+      port: 8080
