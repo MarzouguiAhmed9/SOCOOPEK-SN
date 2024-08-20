@@ -96,6 +96,7 @@ public class Authenticationservice {
         var jwtoken=jwtService.generatetoken(user,cliams);
         return AuthenticateResponse.builder().token(jwtoken).build();
     }
+    @Transactional
     public void activateaccount(String token) throws MessagingException {
        Token savedtoken=tokenRepository.findByToken(token).orElseThrow(()->new RuntimeException("invalid token"));
        if(LocalDateTime.now().isAfter(savedtoken.getExpiresat())){

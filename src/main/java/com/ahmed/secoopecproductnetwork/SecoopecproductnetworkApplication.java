@@ -2,13 +2,19 @@ package com.ahmed.secoopecproductnetwork;
 
 import com.ahmed.secoopecproductnetwork.role.Role;
 import com.ahmed.secoopecproductnetwork.role.RoleRepository;
+import com.ahmed.secoopecproductnetwork.user.User;
+import com.ahmed.secoopecproductnetwork.user.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import java.util.Collections;
+import java.util.List;
 
 @EnableWebMvc
 @EnableAsync
@@ -21,12 +27,36 @@ public class SecoopecproductnetworkApplication {
 
 
 	}
-//	@Bean
-//	public CommandLineRunner runner(RoleRepository roleRepository ) {
-//		return args -> {
-//			if (roleRepository.findByName("USER").isEmpty()) {
-//				roleRepository.save(Role.builder().name("USER").build());
-//			}
-//		};}
 
+	//	@Bean
+	public CommandLineRunner runner(RoleRepository roleRepository ) {
+		return args -> {
+		if (roleRepository.findByName("USER").isEmpty()) {
+				roleRepository.save(Role.builder().name("USER").build());
+			}
+		};}
+	@Bean
+	public CommandLineRunner demo(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+		return args -> {
+			// Fetch the USER role
+			Role userRole = roleRepository.findByName("USER")
+					.orElseGet(() -> roleRepository.save(Role.builder().name("USER").build()));
+
+			// Create a user with roles
+			User user = User.builder()
+					.firstname("John")
+					.lastname("Doe")
+					.email("john.doe@example.com")
+					.password("password") // Hash the password
+					.accountLocked(false)
+					.enabled(true)
+					.roles(Collections.singletonList(userRole))
+					.build();
+
+			// Save the user
+			userRepository.save(user);
+
+			System.out.println("User data has been initialized.");
+		};
+	}
 }

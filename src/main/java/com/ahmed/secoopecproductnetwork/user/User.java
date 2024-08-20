@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="utilisateur")
+@Table(name="_user")
 @EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails, Principal{
     @Override

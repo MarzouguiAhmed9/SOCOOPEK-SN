@@ -5,6 +5,7 @@ import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,6 +18,8 @@ import javax.management.BadBinaryOpValueExpException;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.ahmed.secoopecproductnetwork.handler.BusinessErrorCode.BAD_CREDENTIALS;
+import static org.ietf.jgss.GSSException.UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -27,7 +30,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler (BadBinaryOpValueExpException.class)
     public ResponseEntity<ExceptionResponse>handleBadBinaryexe (BadBinaryOpValueExpException exep){
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ExceptionResponse.builder().businessEroorCode(BusinessErrorCode.BAD_CREDENTIALS.getCode()).businessExceptionDescription(BusinessErrorCode.BAD_CREDENTIALS.getDescription()).error(exep.getMessage()).build());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ExceptionResponse.builder().businessEroorCode(BAD_CREDENTIALS.getCode()).businessExceptionDescription(BAD_CREDENTIALS.getDescription()).error(exep.getMessage()).build());
     }
 
     @ExceptionHandler(MessagingException.class)
@@ -37,6 +40,17 @@ public class GlobalExceptionHandler {
                 .body(
                         ExceptionResponse.builder()
                                 .error(exp.getMessage())
+                                .build()
+                );
+    }      @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ExceptionResponse> handleBadCredentialsException(BadCredentialsException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessEroorCode(BAD_CREDENTIALS.getCode())
+                                .businessExceptionDescription(BAD_CREDENTIALS.getDescription())
+                                .error("Login and/or Password is incorrect")
                                 .build()
                 );
     }
