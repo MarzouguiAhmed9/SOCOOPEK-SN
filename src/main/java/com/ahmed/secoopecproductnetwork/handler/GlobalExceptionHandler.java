@@ -11,7 +11,6 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.client.HttpClientErrorException;
 
 import javax.management.BadBinaryOpValueExpException;
 
@@ -19,7 +18,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.ahmed.secoopecproductnetwork.handler.BusinessErrorCode.BAD_CREDENTIALS;
-import static org.ietf.jgss.GSSException.UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -50,7 +48,7 @@ public class GlobalExceptionHandler {
                         ExceptionResponse.builder()
                                 .businessEroorCode(BAD_CREDENTIALS.getCode())
                                 .businessExceptionDescription(BAD_CREDENTIALS.getDescription())
-                                .error("Login and/or Password is incorrect")
+                                .error("Login and/or Password is incorrectttt")
                                 .build()
                 );
     }
@@ -65,23 +63,23 @@ public class GlobalExceptionHandler {
                 );
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exp) {
-        Set<String> errors = new HashSet<>();
-        exp.getBindingResult().getAllErrors()
-                .forEach(error -> {
-                    //var fieldName = ((FieldError) error).getField();
-                    var errorMessage = error.getDefaultMessage();
-                    errors.add(errorMessage);
-                });
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(
-                        ExceptionResponse.builder()
-                                .validationErrors(errors)
-                                .build()
-                );
-    }
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exp) {
+//        Set<String> errors = new HashSet<>();
+//        exp.getBindingResult().getAllErrors()
+//                .forEach(error -> {
+//                    //var fieldName = ((FieldError) error).getField();
+//                    var errorMessage = error.getDefaultMessage();
+//                    errors.add(errorMessage);
+//                });
+//        return ResponseEntity
+//                .status(HttpStatus.BAD_REQUEST)
+//                .body(
+//                        ExceptionResponse.builder()
+//                                .validationErrors(errors)
+//                                .build()
+//                );
+//    }
 
 
         @ExceptionHandler(Exception.class)
@@ -99,7 +97,24 @@ public class GlobalExceptionHandler {
 
 
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exp) {
+        Set<String> errors = new HashSet<>();
+        exp.getBindingResult().getAllErrors()
+                .forEach(error -> {
+                    //var fieldName = ((FieldError) error).getField();
+                    var errorMessage = error.getDefaultMessage();
+                    errors.add(errorMessage);
+                });
 
+        return ResponseEntity
+                .status(BAD_REQUEST)
+                .body(
+                        ExceptionResponse.builder()
+                                .validationErrors(errors)
+                                .build()
+                );
+    }
 
 
 
@@ -118,13 +133,10 @@ public ResponseEntity<ExceptionResponse>handlenotfoundException(EntityNotFoundEx
 
 
 
-@ExceptionHandler(LockedException.class)//401
-//we we catch this execption we return thus response
+
+    @ExceptionHandler(LockedException.class)//401
     public ResponseEntity<ExceptionResponse> handleLocked (LockedException exp){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ExceptionResponse.builder().businessEroorCode(BusinessErrorCode.ACCOUNT_LOCKED.getCode()).businessExceptionDescription(BusinessErrorCode.ACCOUNT_LOCKED.getDescription()).error(exp.getMessage()).build());
     }
-
-
-
 
 }

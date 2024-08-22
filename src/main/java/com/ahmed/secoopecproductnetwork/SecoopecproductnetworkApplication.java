@@ -28,35 +28,10 @@ public class SecoopecproductnetworkApplication {
 
 	}
 
-	//	@Bean
+	@Bean
 	public CommandLineRunner runner(RoleRepository roleRepository ) {
 		return args -> {
 		if (roleRepository.findByName("USER").isEmpty()) {
 				roleRepository.save(Role.builder().name("USER").build());
 			}
-		};}
-//	@Bean
-//	public CommandLineRunner demo(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
-//		return args -> {
-//			// Fetch the USER role
-//			Role userRole = roleRepository.findByName("USER")
-//					.orElseGet(() -> roleRepository.save(Role.builder().name("USER").build()));
-//
-//			// Create a user with roles
-//			User user = User.builder()
-//					.firstname("John")
-//					.lastname("Doe")
-//					.email("john.doe@example.com")
-//					.password("password") // Hash the password
-//					.accountLocked(false)
-//					.enabled(true)
-//					.roles(Collections.singletonList(userRole))
-//					.build();
-//
-//			// Save the user
-//			userRepository.save(user);
-//
-//			System.out.println("User data has been initialized.");
-//		};
-//	}
-}
+		};};}

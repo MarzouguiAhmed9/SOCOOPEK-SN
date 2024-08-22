@@ -22,7 +22,6 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +29,7 @@ public class Authenticationservice {
     private final AuthenticationManager authenticationManager;
     private final RoleRepository roleRepository;
     private final JWTService jwtService;
-   private final UserRepository userRepository;
+    private final UserRepository userRepository;
     @Value("${application.mailing.frontend.activation-url}")
     private  String activationUrl; // Correct placement of @Value
     private final TokenRepository tokenRepository;
@@ -74,16 +73,16 @@ public class Authenticationservice {
     }
 
     private String generateActivationtoken(int length) {
-     String charat="123456789";
-     StringBuilder token=new StringBuilder();
-     SecureRandom randomin=new SecureRandom();
-     for (int i=0;i<length;i++){
-        int k=randomin.nextInt(charat.length());
-        token.append(charat.charAt(k));
-     }
-     return token.toString();
+        String charat="123456789";
+        StringBuilder token=new StringBuilder();
+        SecureRandom randomin=new SecureRandom();
+        for (int i=0;i<length;i++){
+            int k=randomin.nextInt(charat.length());
+            token.append(charat.charAt(k));
+        }
+        return token.toString();
 
-}
+    }
 
     public AuthenticateResponse authenticate(AuthenticateRequest authenticateRequest) {
         //MAKE AUTHENTICATED ENTITE FROM UPA that get data from request
@@ -98,17 +97,18 @@ public class Authenticationservice {
     }
     @Transactional
     public void activateaccount(String token) throws MessagingException {
-       Token savedtoken=tokenRepository.findByToken(token).orElseThrow(()->new RuntimeException("invalid token"));
-       if(LocalDateTime.now().isAfter(savedtoken.getExpiresat())){
-           sendvalidationemail(savedtoken.getUser());
-           throw  new RuntimeException("activation token has expired");
-    }
-       var user=userRepository.findById(savedtoken.getUser().getId()).orElseThrow(()->new UsernameNotFoundException("not found"));
-       userRepository.save(user);
-       savedtoken.setValidateat(LocalDateTime.now());
-       tokenRepository.save(savedtoken);
+        Token savedtoken=tokenRepository.findByToken(token).orElseThrow(()->new RuntimeException("invalid token"));
+        if(LocalDateTime.now().isAfter(savedtoken.getExpiresat())){
+            sendvalidationemail(savedtoken.getUser());
+            throw  new RuntimeException("activation token has expired");
+        }
+        var user=userRepository.findById(savedtoken.getUser().getId()).orElseThrow(()->new UsernameNotFoundException("not found"));
+        userRepository.save(user);
+        savedtoken.setValidateat(LocalDateTime.now());
+        tokenRepository.save(savedtoken);
 
     }
+
 
 
 }
