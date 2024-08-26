@@ -106,7 +106,7 @@ public class GlobalExceptionHandler {
                     var errorMessage = error.getDefaultMessage();
                     errors.add(errorMessage);
                 });
-
+        System.out.println("asbaa");
         return ResponseEntity
                 .status(BAD_REQUEST)
                 .body(

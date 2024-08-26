@@ -1,6 +1,5 @@
 package com.ahmed.secoopecproductnetwork.user;
 
-
 import com.ahmed.secoopecproductnetwork.history.ProductHistory;
 import com.ahmed.secoopecproductnetwork.role.Role;
 import com.ahmed.secoopecproductnetwork.secoopecproduct.SecoopecProduct;
@@ -13,7 +12,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
@@ -28,49 +26,52 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name="_user")
 @EntityListeners(AuditingEntityListener.class)
-public class User implements UserDetails, Principal{
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream().map(r->new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
-    }
+public class User implements UserDetails {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String firstname;
     private String lastname;
     private LocalTime dateOfBirth;
+
     @Column(unique = true)
     private String email;
+
     private String password;
     private boolean accountLocked;
     private boolean enabled;
 
     @OneToMany(mappedBy = "owner")
-    List<SecoopecProduct> products;
+    private List<SecoopecProduct> products;
 
-    //liste of roles
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdDate;
 
-@CreatedDate
-@Column(nullable = false,updatable = false)
- private LocalDateTime createdDate;
     @LastModifiedDate
-    @Column(insertable = false )
- private LocalDateTime LastModifiedDate;
-
+    @Column(insertable = false)
+    private LocalDateTime lastModifiedDate;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    List<Role> roles;
+    private List<Role> roles;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
+    }
 
     @Override
     public String getPassword() {
-        return null;
+        return this.password;  // Return the actual password
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return this.email;  // Return the email as username
     }
 
     @Override
@@ -93,17 +94,14 @@ public class User implements UserDetails, Principal{
         return enabled;
     }
 
-    @Override
-    public String getName() {
-        return email;
-    }
+    // Additional methods
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
-   @OneToMany (mappedBy = "user")
-   List <Token> tokens;
+    @OneToMany(mappedBy = "user")
+    private List<ProductHistory> productHistories;
 
-    @OneToMany (mappedBy = "user")
-    List<ProductHistory>productHistories;
-    private String getfullname(){
-        return firstname + " " +lastname;
+    public String getFullName() {
+        return firstname + " " + lastname;
     }
 }

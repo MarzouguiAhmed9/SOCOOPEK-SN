@@ -1,11 +1,11 @@
 package com.ahmed.secoopecproductnetwork.secoopecproduct;
 
+import jakarta.persistence.GeneratedValue;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.lang.NonNull;
 
 public record Productrequest(
-
 
         Integer id,
         @NotNull(message= "100")

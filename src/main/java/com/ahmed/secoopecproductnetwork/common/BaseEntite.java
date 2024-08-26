@@ -8,23 +8,25 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.sound.sampled.AudioFileFormat;
 import java.time.LocalDateTime;
-@EntityListeners(AudioFileFormat.class)
 @Getter
 @Setter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
+
 public class BaseEntite {
     @Id
     @GeneratedValue
     private int id;
     @CreatedDate
     @Column(nullable = false,updatable = false)
-    private LocalDateTime createdDATE;
+    private LocalDateTime createdDate;
     @org.springframework.data.annotation.LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime LastModifiedDate;

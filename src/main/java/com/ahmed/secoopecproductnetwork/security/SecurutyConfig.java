@@ -1,6 +1,7 @@
 package com.ahmed.secoopecproductnetwork.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -12,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+@CacheEvict
 
 @Configuration
 @EnableWebSecurity
@@ -50,7 +52,7 @@ public class SecurutyConfig {
                                 .anyRequest()
                                 .authenticated()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))//each request is independent.
                 .authenticationProvider(authenticationProvider) //check username and password
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);//check token
 

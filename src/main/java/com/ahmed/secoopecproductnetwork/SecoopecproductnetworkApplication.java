@@ -13,9 +13,11 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
-
 @EnableWebMvc
 @EnableAsync
 @SpringBootApplication
@@ -23,6 +25,10 @@ import java.util.List;
 public class SecoopecproductnetworkApplication {
 
 	public static void main(String[] args) {
+		ZonedDateTime now = ZonedDateTime.now();
+
+		// Print the current date and time with time zone
+		System.out.println("Current Date and Time with Time Zone: " + now);
 		SpringApplication.run(SecoopecproductnetworkApplication.class, args);
 
 

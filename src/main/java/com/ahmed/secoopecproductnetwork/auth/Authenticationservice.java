@@ -43,11 +43,12 @@ public class Authenticationservice {
         var user= User.builder().firstname(request.getFirstname())
                 .lastname(request.getLastname())
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .password(passwordEncoder.encode(request.getPassword())) // Correctly encoding password
                 .accountLocked(false)
                 .enabled(false)
                 .roles(List.of(userrole)).build();
         userRepository.save(user);
+        System.out.println(passwordEncoder.encode(request.getPassword()));
         sendvalidationemail(user);
 
 //build a user with the registration request
@@ -85,17 +86,19 @@ public class Authenticationservice {
     }
 
     public AuthenticateResponse authenticate(AuthenticateRequest authenticateRequest) {
+
         //MAKE AUTHENTICATED ENTITE FROM UPA that get data from request
         var auth=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticateRequest.getEmail(),authenticateRequest.getPassword()));
+        var user=((User)auth.getPrincipal());
+        System.out.println(user.getPassword());
+
         var cliams=new HashMap<String, Object>();
         // Get the authenticated user details
 
-        var user=((User)auth.getPrincipal());
-        cliams.put("name",user.getName());
+        cliams.put("userfullname",user.getFullName());
         var jwtoken=jwtService.generatetoken(user,cliams);
         return AuthenticateResponse.builder().token(jwtoken).build();
     }
-    @Transactional
     public void activateaccount(String token) throws MessagingException {
         Token savedtoken=tokenRepository.findByToken(token).orElseThrow(()->new RuntimeException("invalid token"));
         if(LocalDateTime.now().isAfter(savedtoken.getExpiresat())){
@@ -103,6 +106,8 @@ public class Authenticationservice {
             throw  new RuntimeException("activation token has expired");
         }
         var user=userRepository.findById(savedtoken.getUser().getId()).orElseThrow(()->new UsernameNotFoundException("not found"));
+        user.setEnabled(true);
+
         userRepository.save(user);
         savedtoken.setValidateat(LocalDateTime.now());
         tokenRepository.save(savedtoken);

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductMapper {
     public SecoopecProduct toproduct(Productrequest request){
-        return SecoopecProduct.builder().id(request.id()).
+        return SecoopecProduct.builder().id(5).
                 producttitle(request.producttitle()).
                 price(request.price()).
                 identifiant(request.identifiant()).

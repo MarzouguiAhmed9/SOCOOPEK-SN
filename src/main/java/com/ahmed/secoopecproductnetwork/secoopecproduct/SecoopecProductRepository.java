@@ -7,13 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface SecoopecProductRepository extends JpaRepository<SecoopecProduct,Integer> {
     @Query("""
-        SELECT sp 
-        FROM SecoopecProduct sp 
-        WHERE sp.archived = false 
-        AND sp.shareable = true 
-        AND sp.owner.id != :userid
-    """)
+    SELECT sp 
+    FROM SecoopecProduct sp 
+   
+    ORDER BY sp.createdDate ASC
+""")
     Page<SecoopecProduct> findalldisplayproducts(Pageable pageable, Integer userid);
+
 
     @Query("""
         SELECT sp 

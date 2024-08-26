@@ -60,14 +60,15 @@ public AuditorAware <Integer>auditorAware(){
 
     }
     @Bean
-    public CorsFilter corsFilter(){
-        final UrlBasedCorsConfigurationSource source=new UrlBasedCorsConfigurationSource();
-        final CorsConfiguration config=new CorsConfiguration();
+    public CorsFilter corsFilter() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        final CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
-        config.setAllowedHeaders(Arrays.asList(ORIGIN,CONTENT_TYPE,ACCEPT,AUTHORIZATION));
-        config.setAllowedMethods(Arrays.asList("GET","POST","PATCH"));
-        source.registerCorsConfiguration("/**",config);
-        return new org.springframework.web.filter.CorsFilter(source);
+        config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"));
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
+
 }
