@@ -8,6 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class ProdcutResponse {
+    public double getRate() {
+        return rate;
+    }
 
     private Integer id;
     private String producttitle;
