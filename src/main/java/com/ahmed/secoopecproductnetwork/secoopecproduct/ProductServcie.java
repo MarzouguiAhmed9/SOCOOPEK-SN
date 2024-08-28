@@ -175,13 +175,26 @@ public class ProductServcie {
     }
 
     public void uploadimageproduct(MultipartFile file, Authentication connecteduser, Integer id) {
-        SecoopecProduct secoopecProduct=secoopecProductRepository.findById(id)
-                .orElseThrow(()->new EntityNotFoundException("no product found"));
+        SecoopecProduct secoopecProduct = secoopecProductRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No product found with id: " + id));
+
         User user = (User) connecteduser.getPrincipal();
-        var productcover=fileStorageService.saveFile(file,user.getId());
-        secoopecProduct.setProductimage(productcover);
-        secoopecProductRepository.save(secoopecProduct);
+        String productCover = fileStorageService.saveFile(file, user.getId());
 
+        if (productCover == null || productCover.isEmpty()) {
+            throw new RuntimeException("File storage service returned null or empty path");
+        }
 
+        secoopecProduct.setProductimage(productCover);
+
+        // Debug output before saving
+        System.out.println("Setting product image to: " + productCover);
+        System.out.println("Product before save: " + secoopecProduct);
+
+        secoopecProduct = secoopecProductRepository.save(secoopecProduct);
+
+        // Debug output after saving
+        System.out.println("Product after save: " + secoopecProduct);
     }
+
 }

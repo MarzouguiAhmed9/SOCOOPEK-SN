@@ -15,50 +15,51 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class FileStorageSerivce {
+public class  FileStorageSerivce {
 
     @Value("${application.file.uploads.photos-output-path}")
     private String fileUploadPath;
-    public String saveFile(@NonNull MultipartFile sourcefile,
 
-                           @NonNull Integer userid) {
-        final String fileUploadSubPath = "users"+ File.separator+ userid;
-        final String finalUploadPath=fileUploadPath + File.separator+fileUploadSubPath;
-        File targetFolder=new File(finalUploadPath);
-        if(!targetFolder.exists()){boolean foldercreated=targetFolder.mkdirs();
-            if(!foldercreated){log.warn("failed to create floder");
+    public String saveFile(@NonNull MultipartFile sourceFile, @NonNull Integer userId) {
+        final String fileUploadSubPath = "users" + File.separator + userId;
+        final String finalUploadPath = fileUploadPath + File.separator + fileUploadSubPath;
+        File targetFolder = new File(finalUploadPath);
+
+        if (!targetFolder.exists()) {
+            boolean folderCreated = targetFolder.mkdirs();
+            if (!folderCreated) {
+                log.warn("Failed to create folder: " + finalUploadPath);
                 return null;
+            }
+        }
 
-            }}
-        final String fileextension=getFileExtention(sourcefile.getOriginalFilename());
-        // ./upload/users/1/2335484984.jpg
-        String targetfilepath=finalUploadPath + File.separator+System.currentTimeMillis()+"."+fileextension;
-        Path targetpath= Paths.get(targetfilepath);
+        final String fileExtension = getFileExtension(sourceFile.getOriginalFilename());
+        String targetFilePath = finalUploadPath + File.separator + System.currentTimeMillis() + "." + fileExtension;
+        Path targetPath = Paths.get(targetFilePath);
 
         try {
-            Files.write(targetpath,sourcefile.getBytes());
-            log.info("File saved to"+targetfilepath);
+            Files.write(targetPath, sourceFile.getBytes());
+            log.info("File saved to " + targetFilePath);
+            return targetFilePath;
         } catch (IOException e) {
-            log.error("File was not saved");
-
+            log.error("File was not saved due to an IOException: " + e.getMessage());
+            return null;
         }
-        return null;
-
     }
 
-
-
-
-
-    private String getFileExtention(String filename) {
-        if(filename==null || filename.isEmpty()){
+    private String getFileExtension(String filename) {
+        if (filename == null || filename.isEmpty()) {
             return "";
         }
-        int LastDotIndex=filename.lastIndexOf(".");
-        if(LastDotIndex==-1){return "";}
-        return filename.substring(LastDotIndex+1).toLowerCase();
+        int lastDotIndex = filename.lastIndexOf(".");
+        if (lastDotIndex == -1) {
+            return "";
+        }
+        return filename.substring(lastDotIndex + 1).toLowerCase();
     }
-    }
+}
+
