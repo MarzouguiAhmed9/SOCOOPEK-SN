@@ -16,6 +16,34 @@ services:
     networks:
       - springangularproject
 
+
+  spn-ui:
+    container_name: mycontainerui
+    image: angularimage:0.01
+    ports:
+      - 8040:80
+    networks:
+      - springangularproject
+    depends_on:
+      - spn-api
+
+
+
+
+  spn-api:
+    container_name: mycontainerproduct
+    image: springimage:0.03
+    ports:
+      - 8085:8080
+    networks:
+      - springangularproject
+    depends_on:
+      - postgres
+
+
+
+
+
   mail-dev:
     container_name: mail-dev-bsn
     image: maildev/maildev
