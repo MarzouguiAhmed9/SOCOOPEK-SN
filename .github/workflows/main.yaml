@@ -1,0 +1,29 @@
+name : Build & deploay spring app
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  build-deploy:
+     name: build and deploy spring boot for bigenners
+     runs-on: ubuntu-latest
+     steps:
+       - name: Checkout code
+         uses: actions/checkout@v2
+
+
+       - name: Set up JDK 17
+         uses: actions/setup-java@v2
+         with:
+           distribution: 'correcto'
+           java-version: 17
+
+       - name: Unit Tests
+         run: mvn -B test --fil pom.xml
+
+       - name: Build the application
+         run:
+           mvn clean
+           mvn -B package --file pom.xml

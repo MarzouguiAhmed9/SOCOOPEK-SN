@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.ahmed</groupId>
 	<artifactId>secoopecproductnetwork</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<name>secoopecproductnetwork</name>
 	<description> project for SOOCOPEC</description>
 	<url/>

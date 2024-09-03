@@ -32,7 +32,7 @@ services:
 
   spn-api:
     container_name: mycontainerproduct
-    image: springimage:0.03
+    image: springimage:0.04
     ports:
       - 8085:8080
     networks:
