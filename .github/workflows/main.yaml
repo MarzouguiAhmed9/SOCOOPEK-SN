@@ -1,29 +1,33 @@
-name : Build & deploay spring app
+name: Build & Deploy Spring App
 on:
   push:
     branches:
       - master
 
-
 jobs:
   build-deploy:
-     name: build and deploy spring boot for bigenners
-     runs-on: ubuntu-latest
-     steps:
-       - name: Checkout code
-         uses: actions/checkout@v3
+    name: Build and Deploy Spring Boot for Beginners
+    runs-on: ubuntu-latest
 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-       - name: Set up JDK 17
-         uses: actions/setup-java@v3
-         with:
-           distribution: 'correcto'
-           java-version: 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-       - name: Unit Tests
-         run: mvn -B test --fil pom.xml
+      - name: Run Unit Tests and Build the Application
+        run: |
+          mvn -B test --file pom.xml
+          mvn clean package --file pom.xml
 
-       - name: Build the application
-         run:
-           mvn clean
-           mvn -B package --file pom.xml
+      # Add your deployment steps here
+      # Example:
+      # - name: Deploy to Server
+      #   run: |
+      #     scp target/myapp.jar user@server:/path/to/deploy
+      #     ssh user@server 'bash /path/to/deploy/deploy.sh'
+
