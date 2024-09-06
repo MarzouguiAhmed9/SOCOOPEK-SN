@@ -32,11 +32,32 @@ jobs:
       - name: Compile Project
         run: ./mvnw clean compile
 
+  unit-test:
+    runs-on: ubuntu-latest
+    name: Unit Test
+    needs: [compile]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set Executable Permissions for mvnw
+        run: chmod +x ./mvnw
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Running Unit Tests
+        run: ./mvnw test
 
   build:
     runs-on: ubuntu-latest
     name: Build Backend
-
+    needs: [unit-test]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
