@@ -4,6 +4,7 @@ WORKDIR /BUILD
 COPY pom.xml /BUILD
 RUN mvn dependency:go-offline
 COPY src /BUILD/src
+
 RUN mvn clean package -DskipTests
 
 # RUNTIME STAGE
