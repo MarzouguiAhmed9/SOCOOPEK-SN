@@ -12,7 +12,7 @@ on:
 
 jobs:
   compile:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     name: Compile Project
     steps:
       - name: Checkout Code
@@ -30,7 +30,7 @@ jobs:
         run: ./mvnw clean compile
 
   unit-test:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     name: Unit Test
     needs: [compile]
     steps:
@@ -49,7 +49,7 @@ jobs:
         run: ./mvnw test
 
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     name: Build Backend
     needs: [unit-test]
     steps:
@@ -68,7 +68,7 @@ jobs:
         run: ./mvnw clean package
 
   build-image:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     name: Build Docker Image
     needs: [build]
     steps:
@@ -98,7 +98,7 @@ jobs:
           platforms: linux/amd64
 
   deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     name: Deploy Backend
     needs: [build-image]
     steps:
