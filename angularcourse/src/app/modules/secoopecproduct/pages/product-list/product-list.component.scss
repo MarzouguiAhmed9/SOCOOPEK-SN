@@ -1,0 +1,26 @@
+h3 {
+  font-size: 2rem; /* Increase font size for emphasis */
+  color: #333; /* Dark gray color for text */
+  font-weight: 600; /* Semi-bold font weight */
+  margin-bottom: 1rem; /* Space below the heading */
+  position: relative; /* For positioning the decorative line */
+  padding-bottom: 0.5rem; /* Space for the decorative line */
+  text-transform: uppercase; /* Uppercase text */
+  letter-spacing: 0.05em; /* Slightly increase letter spacing */
+
+  &::after {
+    content: ''; /* Empty content for the line */
+    position: absolute;
+    left: 0;
+    bottom: 0; /* Position the line at the bottom of the heading */
+    width: 60px; /* Line width */
+    height: 4px; /* Line height */
+    background-color: #2c8513; /* Line color (matching with active color) */
+    border-radius: 2px; /* Slightly rounded corners */
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    font-size: 1.5rem; /* Smaller font size on smaller screens */
+  }
+}

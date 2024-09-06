@@ -1,0 +1,15 @@
+<!-- rating.component.html -->
+
+<div class="rating">
+<!--  creates an array with a length fullstars-->
+
+  <ng-container *ngFor="let _ of [].constructor(fullstars); let i = index">
+    <i class="fas fa-star text-warning"></i>
+  </ng-container>
+  <ng-container *ngIf="halfstar">
+    <i class="fas fa-star-half-alt text-warning"></i>
+  </ng-container>
+  <ng-container *ngFor="let _ of [].constructor(emtystar); let i = index">
+    <i class="far fa-star"></i>
+  </ng-container>
+</div>

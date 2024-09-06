@@ -1,0 +1,98 @@
+/* Container for the Cards */
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem; /* Increased space between cards */
+  justify-content: center; /* Center cards horizontally */
+  padding: 1.5rem; /* Padding around the container */
+}
+
+/* Card Styles */
+.card {
+  width: 20rem; /* Fixed width for uniform card size */
+  height: 30rem; /* Fixed height for uniform card size */
+  border: none; /* Removes default border */
+  border-radius: 0.5rem; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  overflow: hidden; /* Ensures child elements don't overflow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+  background-color: #fff; /* White background */
+  margin-bottom: 2rem; /* Space below each card */
+  margin-right: 3rem; /* Space below each card */
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Slight lift effect on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+/* Image */
+.card-img-top {
+  width: 100%; /* Ensures image covers the card width */
+  height: 12rem; /* Fixed height for the image */
+  object-fit: cover; /* Ensures image covers the area without stretching */
+  border-bottom: 1px solid #e0e0e0; /* Light border below image */
+}
+
+/* Card Body */
+.card-body {
+  padding: 1rem; /* Space inside the card body */
+  background: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+  height: calc(100% - 12rem); /* Adjust height based on image height */
+  overflow: hidden; /* Hide overflow to keep layout neat */
+}
+
+/* Card Title */
+.card-title {
+  font-size: 1.25rem; /* Adjust font size */
+  color: #333; /* Dark text color */
+  font-weight: bold;
+  margin-bottom: 0.5rem; /* Spacing below title */
+}
+
+/* Card Subtitle */
+.card-subtitle {
+  font-size: 1rem; /* Adjust font size */
+  color: #666; /* Slightly lighter text color */
+  margin-bottom: 0.5rem; /* Spacing below subtitle */
+}
+
+/* Icons in Card Body */
+.card-subtitle i {
+  color: #76b95c; /* Icon color */
+  margin-right: 0.5rem; /* Space between icon and text */
+}
+
+/* Card Footer */
+.card-footer {
+  background-color: rgba(0, 0, 0, 0.05); /* Light, transparent background */
+  padding: 0.5rem 1rem; /* Padding around the footer */
+  border-top: 1px solid #e0e0e0; /* Light border at the top */
+}
+
+/* Rating Section in Footer */
+.card-footer .rating {
+  font-size: 1rem; /* Font size for rating */
+  color: #f2a30d; /* Star color */
+}
+
+/* Icons Section in Footer */
+.card-footer .icons i {
+  color: #007bff; /* Color for icons */
+}
+
+/* Actions Section in Footer */
+.card-footer .actions i {
+  color: #28a745; /* Color for edit icon */
+}
+
+.card-footer .actions i.fa-share-nodes {
+  color: #007bff; /* Color for share icon */
+}
+
+.card-footer .actions i.fa-archive {
+  color: #dc3545; /* Color for archive icon */
+}
+i {
+  cursor: pointer;
+}

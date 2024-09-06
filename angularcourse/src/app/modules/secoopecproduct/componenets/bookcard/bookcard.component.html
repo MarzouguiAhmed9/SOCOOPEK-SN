@@ -1,0 +1,34 @@
+<!-- HTML -->
+<div class="card">
+  <img [src]="productcover" class="card-img-top" alt="Product Image">
+  <div class="card-body">
+    <h5 class="card-title">{{ product.producttitle }}</h5>
+    <h5 class="card-subtitle text-secondary">
+      <i class="fa-solid fa-user-check"></i>&nbsp;{{ product.description }}
+    </h5>
+    <h6 class="card-subtitle text-secondary">
+      <i class="fas fa-dollar-sign"></i>&nbsp;{{ product.price }}
+    </h6>
+    <h6 class="card-subtitle text-secondary">
+      <i class="fas fa-user"></i>&nbsp;{{ product.owner }}
+    </h6>
+  </div>
+  <div class="card-footer d-flex gap-2 justify-content-between align-items-center">
+    <div class="d-flex gap-2 rating">
+      <app-rating [rating]="product.rate || 2"> </app-rating>
+      <span class="fw-bold" *ngIf="product.rate ">
+        {{product.rate}}
+      </span>
+    </div>
+    <div class="d-flex gap-2 icons" *ngIf="!manage">
+      <i (click)="onshowdetails()" class="fas fa-circle-info"></i>
+      <i class="fas fa-list-check"></i>
+      <i class="fas fa-heart"></i>
+    </div>
+    <div class="d-flex gap-2 actions" *ngIf="manage">
+      <i (click)="onedit()"class="fas fa-edit"></i>
+      <i  (click)="onshare()"class="fas fa-share-nodes"></i>
+      <i (click)="onarchive()" class="fas fa-archive"></i>
+    </div>
+  </div>
+</div>

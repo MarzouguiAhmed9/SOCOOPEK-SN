@@ -1,0 +1,89 @@
+/* Navbar Styling */
+.navbar {
+  background-color: #93c572; /* Pistachio color for the navbar background */
+   padding: 1rem 2rem; /* Padding for top/bottom and left/right */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+
+  .navbar-brand {
+    color: #c72222;
+    font-size: 1.5rem; /* Larger font size for brand */
+    font-weight: bold;
+    text-transform: uppercase;
+
+    &:hover {
+      color: #e91010; /* Lighter color on hover */
+      text-decoration: none; /* Remove underline */
+    }
+  }
+
+  .navbar-toggler {
+    border: none;
+    background-color: transparent;
+
+    .navbar-toggler-icon {
+      background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"%3E%3Cpath stroke="%23ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h20M5 15h20M5 23h20"/%3E%3C/svg%3E'); /* Custom toggle icon */
+    }
+  }
+
+  .navbar-nav {
+    .nav-item {
+      margin-left: 1rem; /* Space between nav items */
+
+      .nav-link {
+        font-size: 1rem; /* Font size for nav links */
+        padding: 0.5rem 1rem; /* Padding inside nav links */
+        border-radius: 0.25rem; /* Rounded corners for links */
+
+        &:hover {
+          background-color: #76b95c; /* Slightly darker pistachio color on hover */
+          color: #ffffff; /* Text color on hover */
+          text-decoration: none; /* Remove underline */
+        }
+        &.active {
+          background-color: #76b95c; /* Slightly darker pistachio color on hover */
+          color: #ffffff; /* Text color on hover */
+          text-decoration: none; /* Remove underline */
+        }
+
+        i {
+          margin-right: 0.5rem; /* Space between icon and text */
+        }
+      }
+    }
+  }
+
+  .form {
+    display: flex;
+    align-items: center;
+
+    .form-control {
+      border-radius: 0.25rem; /* Rounded corners for input */
+      padding: 0.5rem; /* Padding inside input */
+      border-color: #6c757d; /* Border color for input */
+
+      &:focus {
+        border-color: #007bff; /* Border color on focus */
+        box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25); /* Shadow on focus */
+      }
+    }
+
+    .btn-outline-success {
+      border-color: #28a745; /* Border color for button */
+      color: #28a745; /* Text color for button */
+      padding: 0.5rem 1rem; /* Padding inside button */
+
+      &:hover {
+        background-color: #28a745; /* Background color on hover */
+        color: #ffffff; /* Text color on hover */
+      }
+    }
+
+    .btn-link {
+      color: #ffffff; /* Text color for link button */
+
+      &:hover {
+        color: #f8f9fa; /* Lighter text color on hover */
+      }
+    }
+  }
+}

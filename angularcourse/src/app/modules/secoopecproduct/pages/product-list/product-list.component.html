@@ -1,0 +1,7 @@
+<h3>product  list</h3>
+
+<hr>
+
+<div class="d-flex justify-content-lg-start gap-2 flex-wrap">
+  <app-bookcard [product]="product" *ngFor=" let product of producresponse.content">{{product.description}}</app-bookcard>
+</div>
