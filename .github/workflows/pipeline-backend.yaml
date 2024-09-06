@@ -37,7 +37,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Build Backend
-    needs: [compile]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -51,10 +50,10 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '17'
-          distribution: 'corretto'
+          distribution: 'corretto' # or 'adopt-openjdk'
 
       - name: Build Project
-        run: ./mvnw clean package
+        run: ./mvnw clean package -X
 
   build-image:
     runs-on: ubuntu-latest
