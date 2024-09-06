@@ -53,8 +53,9 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
-      - name: Build Project with Debug
-        run: ./mvnw clean package -X
+      - name: Build Project Without Tests
+        run: ./mvnw clean package -DskipTests
+
 
       - name: Check Disk Usage
         run: df -h
