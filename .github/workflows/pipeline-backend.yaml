@@ -37,7 +37,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Build Backend
-    needs: [compile]
+    needs: [ compile ]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -53,8 +53,15 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
-      - name: Build Project
-        run: ./mvnw clean package
+      - name: Build Project with Debug
+        run: ./mvnw clean package -X
+
+      - name: Check Disk Usage
+        run: df -h
+
+      - name: Check Memory Usage
+        run: free -h
+
 
   build-image:
     runs-on: ubuntu-latest
