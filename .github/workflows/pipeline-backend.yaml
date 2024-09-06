@@ -20,6 +20,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set Executable Permissions for mvnw
+        run: chmod +x ./mvnw
+
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
@@ -38,6 +41,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Set Executable Permissions for mvnw
+        run: chmod +x ./mvnw
 
       - name: Setup JDK
         uses: actions/setup-java@v4
@@ -58,6 +64,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set Executable Permissions for mvnw
+        run: chmod +x ./mvnw
+
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
@@ -76,12 +85,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'corretto'
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -107,6 +110,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+
       - name: Create Deployment Folder
         run: mkdir -p /deployments/backend
 
@@ -116,4 +124,4 @@ jobs:
       - name: Deploy Docker Compose
         run: |
           cd /deployments/backend
-          docker-compose up -d  # Ensure that Docker Compose is installed on the runner
+          docker-compose up -d
