@@ -108,20 +108,23 @@
 
 	<build>
 		<plugins>
+			<!-- Exec Maven Plugin -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>3.0.0</version> <!-- Use the latest stable version -->
+				<!-- Add configuration here if needed -->
 			</plugin>
+
+			<!-- Maven Surefire Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.2.5</version>
-				<configuration>
-					<!-- Add any necessary configuration here -->
-				</configuration>
+
 			</plugin>
 
+			<!-- Spring Boot Maven Plugin -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -134,13 +137,8 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>3.0.0</version> <!-- Check for the latest version -->
-			</plugin>
-
 		</plugins>
 	</build>
+
 
 </project>
