@@ -3,7 +3,7 @@ name: backend pipeline
 on:
   push:
     branches:
-      - ci/pipeline
+      - master
     paths:
       - secoopecproductnetwork/**
       - docker/backend/**
