@@ -1,0 +1,119 @@
+name: backend pipeline
+
+on:
+  push:
+    branches:
+      - ci/pipeline
+    paths:
+      - secoopecproductnetwork/**
+      - docker/backend/**
+      - 'docker-compose.yaml'
+      - .github/workflows/*-backend.yaml
+
+jobs:
+  compile:
+    runs-on: self-hosted
+    name: Compile Project
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Compile Project
+        run: ./mvnw clean compile
+
+  unit-test:
+    runs-on: self-hosted
+    name: Unit Test
+    needs: [compile]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Running Unit Tests
+        run: ./mvnw test
+
+  build:
+    runs-on: self-hosted
+    name: Build Backend
+    needs: [unit-test]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Build Project
+        run: ./mvnw clean package
+
+  build-image:
+    runs-on: self-hosted
+    name: Build Docker Image
+    needs: [build]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}  # Ensure this secret is correct
+
+      - name: Build Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./docker/backend
+          file: Dockerfile
+          push: true
+          platforms: linux/amd64
+
+  deploy:
+    runs-on: self-hosted
+    name: Deploy Backend
+    needs: [build-image]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create Deployment Folder
+        run: mkdir -p /deployments/backend
+
+      - name: Copy Docker Compose File
+        run: cp docker/backend/docker-compose.yml /deployments/backend/docker-compose.yml
+
+      - name: Deploy Docker Compose
+        run: |
+          cd /deployments/backend
+          docker-compose up -d  # Ensure that Docker Compose is installed on the runner
