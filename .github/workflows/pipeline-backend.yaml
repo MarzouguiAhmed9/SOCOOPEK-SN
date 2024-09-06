@@ -6,7 +6,7 @@ on:
       - master
     paths:
       - secoopecproductnetwork/**
-      - docker/backend/**
+      - Docker/backend/**
       - 'docker-compose.yaml'
       - .github/workflows/*-backend.yaml
 
