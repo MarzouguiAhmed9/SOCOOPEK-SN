@@ -84,7 +84,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./Docker/backend
-          file: Dockerfile
+          file:  ./Docker/backend/Dockerfile
           push: true
           platforms: linux/amd64
           tags : ${{ secrets.DOCKERHUB_USERNAME }}/backend
