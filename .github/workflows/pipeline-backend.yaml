@@ -110,11 +110,11 @@ jobs:
 
 
       - name: Copy Docker Compose File
-        run: cp docker/backend/docker-compose.yml /deployments/backend/docker-compose.yml
+        run: cp docker-compose.yml $HOME/deployments/backend/docker-compose.yml
 
       - name: Deploy Docker Compose
         run: |
-          cd /deployments/backend
+          cd $HOME/deployments/backend
           docker-compose up -d
 
 #  deploy:
