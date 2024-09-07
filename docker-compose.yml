@@ -19,7 +19,7 @@ services:
 
   spn-ui:
     container_name: mycontainerui
-    image: angularimage:0.01
+    image: ahmed20007/angularimage
     ports:
       - 8040:80
     networks:
