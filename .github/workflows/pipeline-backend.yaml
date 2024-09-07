@@ -106,7 +106,8 @@ jobs:
           sudo chmod +x /usr/local/bin/docker-compose
 
       - name: Create Deployment Folder
-        run: mkdir -p /deployments/backend
+        run: mkdir -p $HOME/deployments/backend
+
 
       - name: Copy Docker Compose File
         run: cp docker/backend/docker-compose.yml /deployments/backend/docker-compose.yml
