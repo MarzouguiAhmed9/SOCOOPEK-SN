@@ -2,7 +2,7 @@
 FROM maven:3.8.7-openjdk-18 AS build
 WORKDIR /BUILD
 COPY pom.xml /BUILD
-COPY src /BUILD/src
+COPY src /BUILD
 RUN mvn dependency:go-offline
 
 
